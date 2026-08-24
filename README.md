@@ -61,3 +61,7 @@ my-plugin/
 
 - **自由插件**：无 `license` 字段，打包 `.cpk` 即可分发。
 - **付费插件**：上传 Convo 插件市场定价销售，license 由市场在线签发（Ed25519 验签，绑定 wasm 指纹）。
+
+## 许可
+
+[MIT](LICENSE) © 2026 bbsde
