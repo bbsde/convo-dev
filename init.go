@@ -50,7 +50,9 @@ func runInit(args []string) {
 
 	name := fs.Arg(0)
 	if !validName.MatchString(name) {
-		fatalf("用法：convo-dev init <name>；name 须匹配 %s", nameRe)
+		fatalf("插件名 %q 不合法：仅小写字母/数字/下划线，字母开头（%s）。\n"+
+			"  连字符 - 不可用（插件名会派生 SQL 表名 <name>_accounts，标识符不允许 -）——my-plugin 请改 my_plugin",
+			name, nameRe)
 	}
 	dest := *dir
 	if dest == "" {
