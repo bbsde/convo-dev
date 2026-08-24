@@ -8,7 +8,7 @@
 - `src/main.go` — 插件实现：`verify_key`（凭据校验）+ `handle_chat`（流式/非流式中继）+ `echo`
 - `src/plugin.json` — manifest：模型清单 / 表声明 / 端点开关（字段参考 `docs/manifest.md`）
 - `src/migrations/` — SQLite 迁移（通用账号表标准列）
-- `src/ui/` — 插件管理 UI（单 HTML，出现在 convo 控制台里）
+- `src/ui/` — 插件管理 UI 样板（单 HTML：设计 token + 组件 + 账号管理全流程；规范见 `docs/ui.md`）
 - `docs/` — 契约文档（见下）
 - `build.sh` — go mod tidy + TinyGo 编译（**wasm 落 `src/`**，与 plugin.json 同目录
   ——host 按目录发现插件要求二者同在，`src/` 即完整可加载插件目录）+ `.cpk` 打包 → `dist/`
@@ -18,7 +18,8 @@
 1. `docs/rules.md` — 硬性约定与坑，**每条对应真实事故**（wasm 运行期崩溃 / 线性内存打穿 / 内置浏览器 404）
 2. `docs/pdk-api.md` — SDK API（回调注册 / HTTP / 会话 / 配置与状态）
 3. `docs/manifest.md` — plugin.json 字段参考
-4. `docs/testing.md` — 编译、安装调试、打包分发、发布自查
+4. `docs/ui.md` — 插件 UI 规范（token/组件/布局，从样板出发改）
+5. `docs/testing.md` — 编译、安装调试、打包分发、发布自查
 
 ## 典型任务
 

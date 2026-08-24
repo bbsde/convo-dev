@@ -5,33 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>__PLUGIN_NAME__ 账号</title>
 <style>
-  :root { color-scheme: light dark; --muted: rgba(127,127,127,1); --border: rgba(127,127,127,.35); }
-  body { font-family: system-ui, sans-serif; margin: 0; padding: 24px; }
-  .card { max-width: 420px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
-  h2 { margin: 0; }
-  .muted { color: var(--muted); font-size: 13px; margin: 0; white-space: pre-wrap; }
-  label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
-  input { padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; background: transparent; color: inherit; }
-  button { padding: 9px 0; border: 0; border-radius: 8px; background: #06f; color: #fff; font-size: 14px; cursor: pointer; }
-  button:active { opacity: .85; }
+/* ===== 设计 token（对齐 convo 控制台观感；暗色由宿主主题切换 html[data-theme]）===== */
+:root{
+  --bg:#fff; --bg2:#f6f6f7; --text:#1c1f23; --text2:#6b6f76;
+  --primary:#0061fa; --primary-h:#3c7eff; --danger:#f93920; --ok:#00b42a; --warn:#e6a700;
+  --border:rgba(28,31,35,.12); --radius:8px;
+}
+html[data-theme=dark]{
+  --bg:#16161a; --bg2:#232329; --text:#eceeef; --text2:#9e9eae;
+  --border:rgba(255,255,255,.14);
+}
+html{color-scheme:light dark}
+body{background:var(--bg);color:var(--text);font:14px/1.65 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:24px}
+.muted{color:var(--text2);font-size:13px;white-space:pre-wrap}
+.card{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:16px}
+h2{margin:0;font-size:18px}
+hr{border:0;border-top:1px solid var(--border);margin:4px 0}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--text2)}
+.row{display:flex;gap:8px;align-items:end;flex-wrap:wrap}
+.row label{flex:1;min-width:140px}
+/* ===== 组件：按钮 / 输入框 / 表格 / 标签（复制扩展，勿改 token）===== */
+.btn{padding:8px 18px;border:1px solid transparent;border-radius:var(--radius);background:var(--primary);color:#fff;font-size:14px;cursor:pointer}
+.btn:hover{background:var(--primary-h)}
+.btn:active{opacity:.85}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--border)}
+.btn.danger{background:transparent;color:var(--danger);border-color:var(--border)}
+.btn.danger:hover{border-color:var(--danger)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.input{padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;background:transparent;color:inherit;width:100%;box-sizing:border-box}
+.input:focus{outline:2px solid var(--primary);outline-offset:-1px}
+.table{width:100%;border-collapse:collapse;font-size:13px}
+.table th{text-align:left;color:var(--text2);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--border)}
+.table td{padding:8px;border-bottom:1px solid var(--border)}
+.tag{display:inline-block;padding:1px 8px;border-radius:10px;font-size:12px;background:var(--bg2);color:var(--text2)}
+.tag.ok{color:var(--ok)}
+.tag.off{color:var(--text2)}
+/* 环境告警横幅（勿删——__CONVO_ABS__ 缺失 = 宿主环境异常，见 docs/rules.md） */
+#env-warn{display:none;margin-bottom:12px;padding:10px 12px;border:1px solid var(--warn);border-radius:var(--radius);font-size:13px;color:var(--warn)}
 </style>
 </head>
 <body>
-<div id="env-warn" style="display:none; margin-bottom:12px; padding:10px 12px; border:1px solid #e6a700; border-radius:8px; font-size:13px; color:#e6a700;">
-  ⚠ 未检测到宿主注入的 <code>__CONVO_ABS__</code>——convo 版本过旧，或页面不是从控制台·平台管理页打开。
-  API 调用可能全部失败，排查步骤见 docs/rules.md。
-</div>
+<div id="env-warn">⚠ 未检测到宿主注入的 <code>__CONVO_ABS__</code>——convo 版本过旧，或页面不是从控制台·平台管理页打开。API 调用可能全部失败，排查步骤见 docs/rules.md。</div>
 <main class="card">
   <h2>__PLUGIN_NAME__</h2>
   <p class="muted">OpenAI 兼容平台接入（脚手架模板）：API Key + Base URL 直配。</p>
-  <label>API Key
-    <input id="api_key" placeholder="sk-..." autocomplete="off"/>
-  </label>
-  <label>Base URL
-    <input id="base_url" placeholder="https://api.example.com/v1" autocomplete="off"/>
-  </label>
-  <button id="add">验证并添加账号</button>
+  <div class="row">
+    <label>API Key<input id="api_key" class="input" placeholder="sk-..." autocomplete="off"/></label>
+    <label>Base URL<input id="base_url" class="input" placeholder="https://api.example.com/v1" autocomplete="off"/></label>
+    <button id="add" class="btn">验证并添加</button>
+  </div>
   <pre id="out" class="muted"></pre>
+  <hr/>
+  <div>
+    <h2 style="font-size:15px">已添加账号</h2>
+    <table class="table">
+      <thead><tr><th>#</th><th>账号</th><th>状态</th><th>更新时间</th><th></th></tr></thead>
+      <tbody id="accounts"></tbody>
+    </table>
+    <p id="accounts-empty" class="muted">（暂无账号）</p>
+  </div>
 </main>
 <script>
 // 【约定】插件 UI 的 API 调用一律用绝对 URL。基址采信规则（纵深防御）：
@@ -48,9 +80,12 @@ if (!window.__CONVO_ABS__) document.getElementById("env-warn").style.display = "
 
 // 【主题跟随宿主】主应用（平台管理页）两种途径告知主题：
 //   初始 = iframe URL 带 #dark 片段；运行中 = postMessage({type:"convo:theme", theme})。
-// 另有 {type:"convo:layout", desktop:bool}（宽窄屏布局提示，本页用不上，按需接收）。
+// data-theme 驱动 CSS 变量切换（见 <style> token），colorScheme 同步原生控件。
 (function () {
-  var apply = function (t) { document.documentElement.style.colorScheme = t; };
+  var apply = function (t) {
+    document.documentElement.setAttribute("data-theme", t);
+    document.documentElement.style.colorScheme = t;
+  };
   apply(location.hash.indexOf("dark") >= 0 ? "dark" : "light");
   window.addEventListener("message", function (e) {
     var d = e.data || {};
@@ -76,8 +111,8 @@ function action(name, payload) {
   return api("POST", "/api/plugins/__PLUGIN_NAME__/action", { action: name, payload: payload });
 }
 
+var out = document.getElementById("out");
 document.getElementById("add").onclick = function () {
-  var out = document.getElementById("out");
   out.textContent = "验证中…";
   var key = document.getElementById("api_key").value.trim();
   var base = document.getElementById("base_url").value.trim();
@@ -90,9 +125,37 @@ document.getElementById("add").onclick = function () {
         external_id: res.external_id
       });
     })
-    .then(function () { out.textContent = "✅ 已添加"; })
+    .then(function () { out.textContent = "✅ 已添加"; loadAccounts(); })
     .catch(function (e) { out.textContent = "❌ " + e.message; });
 };
+
+// 账号列表（display 是插件自定义 JSON，按需展示关键字段）
+function loadAccounts() {
+  api("GET", "/api/plugins/__PLUGIN_NAME__/accounts").then(function (rows) {
+    var tb = document.getElementById("accounts");
+    document.getElementById("accounts-empty").style.display = rows.length ? "none" : "block";
+    tb.innerHTML = "";
+    rows.forEach(function (a) {
+      var d = {};
+      try { d = JSON.parse(a.display) || {}; } catch (e) {}
+      var tr = document.createElement("tr");
+      tr.innerHTML = "<td>" + a.id + "</td>" +
+        "<td>" + (d.base_url || d.external_id || ("#" + a.id)) + "</td>" +
+        '<td><span class="tag ' + (a.enabled ? "ok" : "off") + '">' + (a.enabled ? "启用" : "停用") + "</span></td>" +
+        "<td class='muted'>" + (a.updated_at || "").slice(0, 19) + "</td>" +
+        '<td style="text-align:right"><button class="btn danger" data-id="' + a.id + '">删除</button></td>';
+      tb.appendChild(tr);
+    });
+    tb.querySelectorAll("button[data-id]").forEach(function (b) {
+      b.onclick = function () {
+        api("DELETE", "/api/plugins/__PLUGIN_NAME__/accounts/" + b.dataset.id)
+          .then(loadAccounts)
+          .catch(function (e) { out.textContent = "❌ " + e.message; });
+      };
+    });
+  }).catch(function (e) { out.textContent = "❌ 加载账号失败: " + e.message; });
+}
+loadAccounts();
 </script>
 </body>
 </html>
