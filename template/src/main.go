@@ -6,7 +6,7 @@
 //   2. 按目标平台协议改写 verifyKey / handleChat（身份指纹、协议转换、自定义 action 等）
 //   3. ui/index.html 按需扩展（已带 添加账号→verify_key→落库 全流程）
 //
-// 硬性约定见 convo-dev/docs/rules.md：echo action 必须保留；wasm 内禁用一切 sync
+// 硬性约定见 docs/rules.md：echo action 必须保留；wasm 内禁用一切 sync
 // 原语；不做整份请求体 JSON 树化（浅解码/透传）；插件 UI 一律绝对 URL。
 
 package main

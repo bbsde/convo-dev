@@ -40,4 +40,4 @@ echo "==> 打包 cpk → $DIST/$NAME-$VER.cpk"
 ( cd "$SRC" && tar -czf "$DIST/$NAME-$VER.cpk" plugin.json -C "$DIST" "$NAME.wasm" )
 
 echo "✅ $DIST/$NAME.wasm + $DIST/$NAME-$VER.cpk（v$VER）"
-echo "   安装调试：见 convo-dev 仓 docs/testing.md（插件目录布局 + echo 冒烟）"
+echo "   安装调试：见 docs/testing.md（插件目录布局 + echo 冒烟）"

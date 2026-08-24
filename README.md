@@ -47,16 +47,12 @@ my-plugin/
 |---|---|
 | `main.go` + `go.mod` | `convo-dev` CLI 本体（`go install github.com/bbsde/convo-dev@latest`） |
 | `pdk/` | 插件 SDK（独立 Go module `github.com/bbsde/convo-dev/pdk`），wasm↔host 的全部 ABI 封装 |
-| `template/` | 项目模板（CLI 远程拉取的源）：`src/` 源码 + `docs/` 文档模板 + `build.sh` |
-| `docs/manifest.md` | plugin.json 字段参考（表/模型/整形/定时任务/授权） |
-| `docs/pdk-api.md` | SDK API 参考（注册回调 / HTTP / 会话 / 配置与状态） |
-| `docs/rules.md` | **硬性约定与坑**（echo 必须、禁 sync 原语、禁 JSON 树化、UI 绝对 URL…） |
-| `docs/testing.md` | 编译、安装调试、打包分发、发布自查 |
-| `docs/releasing.md` | 发布与版本管理（CLI/pdk 双 tag 序列、模板版本对齐、pdk 升级检查单） |
+| `template/` | 项目模板（CLI 远程拉取的源）：`src/` 源码 + `AGENTS.md` + `build.sh` + `docs/`（契约文档四篇 + README/NOTES 骨架，**随 init 进入每个插件项目**） |
+| `docs/releasing.md` | 发布与版本管理（CLI/pdk 双 tag 序列、模板版本对齐、pdk 升级检查单）——面向本仓维护者，不随项目分发 |
 
-## 先读 rules.md
+## 先读 template/docs/rules.md
 
-里面每条约定都对应真实事故（wasm 运行期崩溃、线性内存打穿、内置浏览器 404……）。脚手架模板已按约定写好，改写时别把防护改没了。
+里面每条约定都对应真实事故（wasm 运行期崩溃、线性内存打穿、内置浏览器 404……）。脚手架模板已按约定写好，改写时别把防护改没了。（`convo-dev init` 后它就在你项目的 `docs/rules.md`。）
 
 ## 分发
 

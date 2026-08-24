@@ -15,5 +15,5 @@
 ## 开发
 
 - 构建：`./build.sh`（产物在 `dist/`）
-- 契约与坑：[convo-dev/docs](https://github.com/bbsde/convo-dev/tree/main/docs)（manifest 参考 / pdk API / 硬性约定）
+- 契约文档（本目录）：[manifest.md](./manifest.md)（plugin.json 字段）· [pdk-api.md](./pdk-api.md)（SDK API）· [rules.md](./rules.md)（**硬性约定与坑**）· [testing.md](./testing.md)（调试/分发/自查）
 - 逆向笔记（端点指纹/风控/模型清单事实源）：[NOTES.md](./NOTES.md)
