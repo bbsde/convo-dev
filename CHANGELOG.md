@@ -6,6 +6,7 @@
 
 ## 2026-08-24
 
+- `60be5c3` feat: convo-dev update 自更新——tags.atom 查最新 tag（无认证无限流，GitHub API 匿名 403 实测排除）→ 对比 buildinfo 当前版 → GOPROXY=direct 直连 go install（绕 sumdb 新 tag 索引延迟，新 tag 推出立即可更）；发布 tag v0.1.6（CLI）
 - `3d109c7` docs: 示例插件名 my-plugin → my_plugin（README + 模板 testing.md 共 13 处）——照旧文档敲命令会被 init 拒名；发布 tag v0.1.5（CLI）
 - `f4e40e0` fix: init 名称报错说人话——点破连字符不可用原因（name 派生 SQL 表名 <name>_accounts，host 表名白名单禁 -）与改法（my-plugin → my_plugin）；发布 tag v0.1.4（CLI）
 - `6b56145` feat: 契约文档随模板分发——manifest/pdk-api/rules/testing 四篇挪入 template/docs/（init 即得全套，修复模板 AGENTS.md 引用断链）；releasing.md 留仓根；模板内 README/main.go/ui/build.sh 指向改本地；发布 tag v0.1.3（CLI）
