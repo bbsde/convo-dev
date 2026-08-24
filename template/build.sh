@@ -34,7 +34,7 @@ echo "==> go mod tidy"
 ( cd "$SRC" && go mod tidy )
 
 echo "==> TinyGo 编译 → $DIST/$NAME.wasm"
-( cd "$SRC" && tinygo build -target wasi -no-debug -o "$DIST/$NAME.wasm" . )
+( cd "$SRC" && "$TG" build -target wasi -no-debug -o "$DIST/$NAME.wasm" . )
 
 echo "==> 打包 cpk → $DIST/$NAME-$VER.cpk"
 ( cd "$SRC" && tar -czf "$DIST/$NAME-$VER.cpk" plugin.json -C "$DIST" "$NAME.wasm" )

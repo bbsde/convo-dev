@@ -22,7 +22,25 @@ func runInit(args []string) {
 	ref := fs.String("ref", "main", "模板分支/tag")
 	url := fs.String("url", "", "完整 tarball 地址（覆盖默认）")
 	tplDir := fs.String("template", "", "本地模板目录（跳过远程拉取）")
-	_ = fs.Parse(args)
+
+	// flag 包默认在首个位置参数后停止解析——把位置参数挪到末尾，
+	// 让 `convo-dev init <name> -d <dir>` 与 `-d <dir> <name>` 都可用。
+	var reordered, positional []string
+	takesValue := map[string]bool{"d": true, "ref": true, "url": true, "template": true}
+	for i := 0; i < len(args); i++ {
+		a := args[i]
+		if a != "-" && strings.HasPrefix(a, "-") {
+			reordered = append(reordered, a)
+			key := strings.TrimLeft(strings.SplitN(a, "=", 2)[0], "-")
+			if !strings.Contains(a, "=") && takesValue[key] && i+1 < len(args) {
+				i++
+				reordered = append(reordered, args[i])
+			}
+			continue
+		}
+		positional = append(positional, a)
+	}
+	_ = fs.Parse(append(reordered, positional...))
 
 	name := fs.Arg(0)
 	if !validName.MatchString(name) {
