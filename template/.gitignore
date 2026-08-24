@@ -1,0 +1,4 @@
+# 编译产物不入库：wasm 随 build.sh 落 src/（目录加载用），分发走 dist/*.cpk
+src/*.wasm
+dist/*
+!dist/.gitkeep

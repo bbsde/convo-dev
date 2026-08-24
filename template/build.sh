@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# __PLUGIN_NAME__ 插件构建脚本：src/ → dist/（wasm + cpk）。
+# __PLUGIN_NAME__ 插件构建脚本：src/ 编译（wasm 落 src/）+ dist/ 打包 .cpk。
 #
 # 用法: ./build.sh          # go mod tidy + TinyGo 编译 + cpk 打包
 # 前置: TinyGo（https://tinygo.org）；TinyGo 缺 wasm-opt 时需 binaryen（设 WASMOPT=<路径>）
@@ -33,11 +33,13 @@ export WASMOPT="$WOPT"
 echo "==> go mod tidy"
 ( cd "$SRC" && go mod tidy )
 
-echo "==> TinyGo 编译 → $DIST/$NAME.wasm"
-( cd "$SRC" && "$TG" build -target wasi -no-debug -o "$DIST/$NAME.wasm" . )
+echo "==> TinyGo 编译 → $SRC/$NAME.wasm"
+# wasm 落在 src/（与 plugin.json 同目录）：host 按目录发现插件时要求二者同在，
+# 这样 src/ 自身就是可直接软链/复制到 plugins/providers/<name>/ 的完整插件目录。
+( cd "$SRC" && "$TG" build -target wasi -no-debug -o "$NAME.wasm" . )
 
 echo "==> 打包 cpk → $DIST/$NAME-$VER.cpk"
-( cd "$SRC" && tar -czf "$DIST/$NAME-$VER.cpk" plugin.json -C "$DIST" "$NAME.wasm" )
+( cd "$SRC" && tar -czf "$DIST/$NAME-$VER.cpk" plugin.json "$NAME.wasm" )
 
-echo "✅ $DIST/$NAME.wasm + $DIST/$NAME-$VER.cpk（v$VER）"
-echo "   安装调试：见 docs/testing.md（插件目录布局 + echo 冒烟）"
+echo "✅ $SRC/$NAME.wasm（目录加载用）+ $DIST/$NAME-$VER.cpk（分发用）（v$VER）"
+echo "   调试：把 src/ 软链/复制到 convo 的 plugins/providers/$NAME/ 后重启——见 docs/testing.md"

@@ -10,7 +10,8 @@
 - `src/migrations/` — SQLite 迁移（通用账号表标准列）
 - `src/ui/` — 插件管理 UI（单 HTML，出现在 convo 控制台里）
 - `docs/` — 契约文档（见下）
-- `build.sh` — go mod tidy + TinyGo 编译 + .cpk 打包（产物 → `dist/`）
+- `build.sh` — go mod tidy + TinyGo 编译（**wasm 落 `src/`**，与 plugin.json 同目录
+  ——host 按目录发现插件要求二者同在，`src/` 即完整可加载插件目录）+ `.cpk` 打包 → `dist/`
 
 ## 开发前必读（按序）
 
@@ -25,7 +26,7 @@
   `src/main.go` 的 verifyKey / handleChat。平台逆向所得（端点指纹、模型清单、风控）
   记到 `docs/NOTES.md`，边逆向边记。
 - **加管理 UI 功能** → `src/ui/`
-- **编译验证** → `./build.sh`（产物 `dist/__PLUGIN_NAME__.wasm` + .cpk）
+- **编译验证** → `./build.sh`（wasm → `src/`，`.cpk` → `dist/`）
 
 ## 铁律（违反 = 运行期崩溃或验收不过）
 
@@ -41,10 +42,12 @@
    （`#dark` 初始片段 + `convo:theme` postMessage）——它们对应真实事故。
 5. 提交前自查：`grep -rn "sync\." src/` 应为空；echo 实调 200。
 
-## 调试回路
+## 调试回路（主路径：.cpk 安装）
 
-`./build.sh` → 把 `src/` 软链/复制到 convo 的 `plugins/providers/__PLUGIN_NAME__/` →
-重启 convo → echo 自检（`docs/testing.md` 有现成 curl 命令）→ 控制台开插件 UI。
+`./build.sh` → `dist/*.cpk` → convo 控制台·**市场页拖入 .cpk** 安装 → 平台管理页
+打开插件 UI；echo 自检（`docs/testing.md` 有现成 curl 命令）。迭代 = 重新 build 后
+再拖入覆盖安装。备选目录方式（免打包直调）：`src/` 软链到 convo 的
+`plugins/providers/__PLUGIN_NAME__/` 后重启（build 已把 wasm 编到 src/）。
 
 ## 分发
 

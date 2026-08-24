@@ -26,9 +26,28 @@ tinygo build -target wasi -no-debug -o my_plugin.wasm .
 
 > 迭代 pdk 本身时可用本地替换：`go mod edit -replace github.com/bbsde/convo-dev/pdk=../convo-dev/pdk`
 
-## 安装到 convo 调试
+## 安装到 convo 测试（主路径：.cpk 拖入安装）
 
-convo 按目录发现插件（`plugin.json` + wasm 同目录）：
+`./build.sh` 产出 `dist/my_plugin-<ver>.cpk` → convo 控制台 → **市场页拖入 .cpk**（或文件选择按钮）→ 安装完成出现插件卡片 → 到平台管理页测试（打开插件 UI、发请求）。
+
+**迭代更新**：改代码 → 重新 `./build.sh` → 再拖入新 `.cpk` 覆盖安装（同 `name` 即更新）。
+
+自检 echo 接线（冒烟同款）：
+
+```bash
+curl -X POST http://127.0.0.1:8080/api/plugins/my_plugin/action \
+  -H "Content-Type: application/json" \
+  -d '{"action":"echo","payload":{"ping":1}}'
+# 期望：200，原样回 {"ping":1}
+```
+
+UI 调试：控制台 → 平台管理页 → 打开插件 UI（host 注入 `__CONVO_ABS__`）。
+
+> 被 license 验签 skip 的插件不会被目录轮询自动重试——重装/市场重登或重启 convo。
+
+## 备选：目录方式（免打包直调）
+
+convo 也按目录发现插件（`plugin.json` + wasm 同目录）：
 
 ```
 <plugins-dir>/providers/my_plugin/
@@ -36,28 +55,13 @@ convo 按目录发现插件（`plugin.json` + wasm 同目录）：
   └── my_plugin.wasm
 ```
 
-`plugins-dir` 解析顺序：`CONVO_PLUGINS_DIR` env > 二进制同级 `plugins/` > 二进制同级 `../plugins/`（发布布局）。放好后重启 convo（或经市场重登触发重载）。
-
-自检 echo 接线（冒烟同款）：
-
-```bash
-curl -X POST http://127.0.0.1:8080/api/plugins/my_plugin/action \
-  -H 'Content-Type: application/json' \
-  -d '{"action":"echo","payload":{"ping":1}}'
-# 期望：200，原样回 {"ping":1}
-```
-
-UI 调试：控制台 → 平台/插件页 → 打开插件 UI（host 注入 `__CONVO_ABS__`）。
-
-> 被 license 验签 skip 的插件不会被目录轮询自动重试——重装/市场重登或重启 convo。
+wasm 由 `./build.sh` 编译到 `src/`（与 plugin.json 同目录），把 `src/` 软链或复制到上述位置后重启 convo 即可。`plugins-dir` 解析顺序：`CONVO_PLUGINS_DIR` env > 二进制同级 `plugins/` > 二进制同级 `../plugins/`（发布布局）。
 
 ## 打包分发
 
-```bash
-tar -czf my_plugin-0.1.0.cpk plugin.json my_plugin.wasm
-```
+`.cpk` 已由 `./build.sh` 打包到 `dist/`（plugin.json + wasm 的 tar.gz）。
 
-- **自由插件**：.cpk 直接分发（用户经市场安装或放入插件目录）。
+- **自由插件**：`.cpk` 直接分发（用户在 convo 市场页拖入安装）。
 - **付费插件**：上传市场定价销售，license 由市场按订单在线签发（见 rules.md §8）。
 
 ## 发布前自查

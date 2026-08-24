@@ -11,7 +11,7 @@ go install github.com/bbsde/convo-dev@latest
 # 生成插件项目（远程拉取本仓模板，无需 clone）
 convo-dev init my_plugin
 cd my_plugin
-./build.sh          # go mod tidy + TinyGo 编译 + cpk 打包 → dist/
+./build.sh          # TinyGo 编译（wasm→src/）+ cpk 打包（→dist/）
 ```
 
 前置：[Go ≥ 1.22](https://go.dev/dl/) + [TinyGo](https://tinygo.org/getting-started/install/) + [convo 网关](https://github.com/bbsde/convo/releases)。
@@ -22,8 +22,8 @@ cd my_plugin
 
 ```
 my_plugin/
-├── build.sh        # 构建脚本（产物 → dist/）
-├── dist/           # 构建产物（my_plugin.wasm / my_plugin-<ver>.cpk）
+├── build.sh        # 构建脚本（wasm→src/，cpk→dist/）
+├── dist/           # 分发包（my_plugin-<ver>.cpk；wasm 编译到 src/ 供目录加载）
 ├── docs/           # 项目文档（README 骨架 + NOTES 逆向笔记模板）
 └── src/            # 源码
     ├── main.go     # OpenAI 兼容接入模板（echo + verify_key + chat 流式/非流式中继）

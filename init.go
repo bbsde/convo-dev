@@ -96,9 +96,9 @@ func runInit(args []string) {
 	}
 	requireTemplate(tmp)
 
-	// 2. 落位：src/ docs/ build.sh AGENTS.md → 目标项目；dist/ 空目录
+	// 2. 落位：src/ docs/ build.sh AGENTS.md .gitignore → 目标项目；dist/ 空目录
 	fmt.Printf("==> 生成插件 %s → %s\n", name, dest)
-	for _, part := range []string{"src", "docs", "build.sh", "AGENTS.md"} {
+	for _, part := range []string{"src", "docs", "build.sh", "AGENTS.md", ".gitignore"} {
 		if err := copyTree(filepath.Join(tmp, part), filepath.Join(dest, part)); err != nil {
 			fatalf("写入 %s 失败：%v", part, err)
 		}
