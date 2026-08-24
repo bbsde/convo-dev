@@ -6,6 +6,7 @@
 
 ## 2026-08-24
 
+- `a9fc2ad` fix(template): 产物位置对齐 host 发现约定——wasm 编译输出 dist/→src/（host 要求 wasm 与 plugin.json 同目录；此前照文档软链 src/ 必报找不到 wasm，ark 插件实案定位）；调试主路径改为 build → dist/*.cpk → 控制台市场页拖入安装（即装即载免重启），目录方式降备选；模板补 .gitignore；实测 install-cpk API 全链路 loaded+echo 200；发布 tag v0.1.8（CLI）
 - `cced533` feat(template): UI 样板补全——`__CONVO_ABS__` 环境自检横幅（缺失 = convo 版本过旧/非平台管理页入口，直说原因不静默挂）+ 宿主主题跟随（#dark 初始片段 + convo:theme postMessage + colorScheme 应用）；铁律注明保留防护；发布 tag v0.1.7（CLI）
 - `60be5c3` feat: convo-dev update 自更新——tags.atom 查最新 tag（无认证无限流，GitHub API 匿名 403 实测排除）→ 对比 buildinfo 当前版 → GOPROXY=direct 直连 go install（绕 sumdb 新 tag 索引延迟，新 tag 推出立即可更）；发布 tag v0.1.6（CLI）
 - `3d109c7` docs: 示例插件名 my-plugin → my_plugin（README + 模板 testing.md 共 13 处）——照旧文档敲命令会被 init 拒名；发布 tag v0.1.5（CLI）
