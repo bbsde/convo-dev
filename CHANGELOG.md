@@ -5,7 +5,7 @@
 > pdk 的更早历史见 convo-private 仓 git 历史（原 `src/pdk/CHANGELOG.md`，2026-08-24 随迁移删除）。
 
 ## 2026-08-24
-- `ALIGN` fix(template): UI 规范对齐一方插件权威 token（此前凭印象写 Semi 猜测值——zcode 漂移审计时发现；token/命名/组件形态/暗色机制 html.dark 与 platform/workbuddy/zcode 完全同源，值出 fnos-theme.css；采纳 workbuddy 教训页面显式 bg-1）；发布 tag v0.1.14（CLI）
+- `b5e5af1` fix(template): UI 规范对齐一方插件权威 token（此前凭印象写 Semi 猜测值——zcode 漂移审计时发现；token/命名/组件形态/暗色机制 html.dark 与 platform/workbuddy/zcode 完全同源，值出 fnos-theme.css；采纳 workbuddy 教训页面显式 bg-1）；发布 tag v0.1.14（CLI）
 - `07c6279` feat(template): 插件 UI 规范——设计 token（CSS 变量亮/暗两套，html[data-theme] 驱动）+ btn/input/table/tag 组件样式集 + 账号列表展示/删除全流程样板（GET/DELETE /accounts 契约示例）；新增 docs/ui.md（token 语义/组件/布局/硬性要求），必读清单五篇；发布 tag v0.1.13（CLI）
 - `cc5c453` feat: convo-dev test——静态检查（plugin.json/表名/sync 扫描/wasm）+ 真实网关冒烟（本地 CONVO_DEV_GATEWAY > 缓存 > latest.json 自动下载 sha256 校验；临时实例 install-cpk 上传 + echo 实调，测完自动清理）；wtproj 全绿、ark 旧布局被准确拦截实测；配套公共仓 Release 资产补 latest.json（convo@456d2d6）；发布 tag v0.1.12（CLI）
 
