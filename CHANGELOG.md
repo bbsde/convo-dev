@@ -5,6 +5,7 @@
 > pdk 的更早历史见 convo-private 仓 git 历史（原 `src/pdk/CHANGELOG.md`，2026-08-24 随迁移删除）。
 
 ## 2026-08-24
+- `cc5c453` feat: convo-dev test——静态检查（plugin.json/表名/sync 扫描/wasm）+ 真实网关冒烟（本地 CONVO_DEV_GATEWAY > 缓存 > latest.json 自动下载 sha256 校验；临时实例 install-cpk 上传 + echo 实调，测完自动清理）；wtproj 全绿、ark 旧布局被准确拦截实测；配套公共仓 Release 资产补 latest.json（convo@456d2d6）；发布 tag v0.1.12（CLI）
 
 - `5a11e08` feat: Windows 系统代理自动探测——Go 不读系统代理只读环境变量（Clash「系统代理」模式实案：PS 用户直连 GitHub 超时）；newHTTPClient 环境变量优先、注册表兜底（ProxyEnable/ProxyServer 含分号格式），update 与 init 模板拉取统一接入；实测无环境变量 shell 下旧版超时、新版秒通；发布 tag v0.1.11（CLI）
 - `e72befb` fix: update 抗弱网——tags.atom 超时 15s→30s、失败自动重试一次、报错提示 HTTPS_PROXY 代理设置（Go 读代理环境变量；直连 GitHub 波动实案：本机 Clash shell 通、用户终端直连超时）；发布 tag v0.1.10（CLI）
