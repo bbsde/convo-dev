@@ -27,7 +27,7 @@ func fetchLatestTag() (string, error) {
 		if attempt > 0 {
 			time.Sleep(2 * time.Second)
 		}
-		client := &http.Client{Timeout: 30 * time.Second}
+		client := newHTTPClient(30 * time.Second)
 		resp, err := client.Get("https://github.com/bbsde/" + repoName + "/tags.atom")
 		if err != nil {
 			lastErr = err

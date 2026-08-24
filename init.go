@@ -167,7 +167,7 @@ func requireTemplate(dir string) {
 
 // fetchTemplateTree 下载仓库 tarball，抽出 template/ 子树写入 dst。
 func fetchTemplateTree(url, dst string) error {
-	client := &http.Client{Timeout: 60 * time.Second}
+	client := newHTTPClient(60 * time.Second)
 	resp, err := client.Get(url)
 	if err != nil {
 		return err
