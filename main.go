@@ -10,6 +10,7 @@
 //	convo-dev doctor                   # 环境体检：检查 go / tinygo / wasm-opt 并报告
 //	convo-dev setup                    # 自动安装缺失工具（TinyGo / binaryen → ~/.convo-dev/tools）
 //	convo-dev env                      # 输出 shell 集成行（eval "$(convo-dev env)"）
+//	convo-dev update                   # 自更新到最新版（查 GitHub tag → go install）
 //	convo-dev version
 //
 // init 生成的项目结构（模板占位符 __PLUGIN_NAME__ 会被替换为 <name>）：
@@ -57,6 +58,8 @@ func main() {
 		runSetup(os.Args[2:])
 	case "env":
 		runEnv(os.Args[2:])
+	case "update", "upgrade":
+		runUpdate(os.Args[2:])
 	case "version", "-v", "--version":
 		printVersion()
 	case "help", "-h", "--help":
@@ -86,6 +89,7 @@ init 选项：
                     选项：--tinygo <ver> --binaryen <ver> --skip-tinygo --skip-binaryen
                           --tinygo-url/--binaryen-url <完整地址> --mirror <前缀>（或 env CONVO_DEV_MIRROR）
   convo-dev env      输出 shell 集成行：eval "$(convo-dev env)"
+  convo-dev update   自更新：查 GitHub 最新 tag → go install（直连绕 sumdb 延迟）
   convo-dev version
 `)
 }

@@ -16,6 +16,8 @@ cd my_plugin
 
 前置：[Go ≥ 1.22](https://go.dev/dl/) + [TinyGo](https://tinygo.org/getting-started/install/) + [convo 网关](https://github.com/bbsde/convo/releases)。
 
+更新：`convo-dev update`（查 GitHub 最新 tag 并自更新；新 tag 推出后立即可更，不等代理索引）。
+
 `init` 生成的项目结构：
 
 ```
