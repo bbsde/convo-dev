@@ -6,6 +6,7 @@
 
 ## 2026-08-24
 
+- `f4e40e0` fix: init 名称报错说人话——点破连字符不可用原因（name 派生 SQL 表名 <name>_accounts，host 表名白名单禁 -）与改法（my-plugin → my_plugin）；发布 tag v0.1.4（CLI）
 - `6b56145` feat: 契约文档随模板分发——manifest/pdk-api/rules/testing 四篇挪入 template/docs/（init 即得全套，修复模板 AGENTS.md 引用断链）；releasing.md 留仓根；模板内 README/main.go/ui/build.sh 指向改本地；发布 tag v0.1.3（CLI）
 - `e6a5f11` feat(template): 生成项目自带 AGENTS.md——init 落位列表 +1（占位符随项目名替换）；布局导览 + 必读文档顺序 + 铁律速查 + 调试回路，开发者 init 后目录即 agent 工作区，口述需求即可按规范开发；发布 tag v0.1.2（CLI）
 - `93469e2` feat: init 默认 ref 跟随 CLI 自身版本 tag（buildinfo 仅认纯 vX.Y.Z，pseudo-version/devel 回退 main）——模板与 CLI/pdk 契约不再漂移，热修走 --ref main；新增 docs/releasing.md 发布规范（双 tag 序列 / pdk 升级检查单 / sumdb 延迟坑）；发布 tag v0.1.1（CLI）
