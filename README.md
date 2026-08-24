@@ -9,8 +9,8 @@
 go install github.com/bbsde/convo-dev@latest
 
 # 生成插件项目（远程拉取本仓模板，无需 clone）
-convo-dev init my-plugin
-cd my-plugin
+convo-dev init my_plugin
+cd my_plugin
 ./build.sh          # go mod tidy + TinyGo 编译 + cpk 打包 → dist/
 ```
 
@@ -19,9 +19,9 @@ cd my-plugin
 `init` 生成的项目结构：
 
 ```
-my-plugin/
+my_plugin/
 ├── build.sh        # 构建脚本（产物 → dist/）
-├── dist/           # 构建产物（my-plugin.wasm / my-plugin-<ver>.cpk）
+├── dist/           # 构建产物（my_plugin.wasm / my_plugin-<ver>.cpk）
 ├── docs/           # 项目文档（README 骨架 + NOTES 逆向笔记模板）
 └── src/            # 源码
     ├── main.go     # OpenAI 兼容接入模板（echo + verify_key + chat 流式/非流式中继）

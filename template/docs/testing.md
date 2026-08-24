@@ -14,12 +14,12 @@ convo-dev doctor   # 只体检不安装
 ## 编译
 
 ```bash
-cd my-plugin
+cd my_plugin
 go mod tidy                                            # 拉取 github.com/bbsde/convo-dev/pdk
-tinygo build -target wasi -no-debug -o my-plugin.wasm .
+tinygo build -target wasi -no-debug -o my_plugin.wasm .
 ```
 
-产物 = `my-plugin.wasm`；与 `plugin.json` 同目录即构成可安装插件。
+产物 = `my_plugin.wasm`；与 `plugin.json` 同目录即构成可安装插件。
 
 > TinyGo 报 `could not find wasm-opt` 时：安装 [binaryen](https://github.com/WebAssembly/binaryen/releases)
 > 并设 `WASMOPT=/path/to/wasm-opt(.exe)`（部分 TinyGo 发行版不带它）。
@@ -31,9 +31,9 @@ tinygo build -target wasi -no-debug -o my-plugin.wasm .
 convo 按目录发现插件（`plugin.json` + wasm 同目录）：
 
 ```
-<plugins-dir>/providers/my-plugin/
+<plugins-dir>/providers/my_plugin/
   ├── plugin.json
-  └── my-plugin.wasm
+  └── my_plugin.wasm
 ```
 
 `plugins-dir` 解析顺序：`CONVO_PLUGINS_DIR` env > 二进制同级 `plugins/` > 二进制同级 `../plugins/`（发布布局）。放好后重启 convo（或经市场重登触发重载）。
@@ -41,7 +41,7 @@ convo 按目录发现插件（`plugin.json` + wasm 同目录）：
 自检 echo 接线（冒烟同款）：
 
 ```bash
-curl -X POST http://127.0.0.1:8080/api/plugins/my-plugin/action \
+curl -X POST http://127.0.0.1:8080/api/plugins/my_plugin/action \
   -H 'Content-Type: application/json' \
   -d '{"action":"echo","payload":{"ping":1}}'
 # 期望：200，原样回 {"ping":1}
@@ -54,7 +54,7 @@ UI 调试：控制台 → 平台/插件页 → 打开插件 UI（host 注入 `__
 ## 打包分发
 
 ```bash
-tar -czf my-plugin-0.1.0.cpk plugin.json my-plugin.wasm
+tar -czf my_plugin-0.1.0.cpk plugin.json my_plugin.wasm
 ```
 
 - **自由插件**：.cpk 直接分发（用户经市场安装或放入插件目录）。
