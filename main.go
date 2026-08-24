@@ -60,6 +60,8 @@ func main() {
 		runEnv(os.Args[2:])
 	case "update", "upgrade":
 		runUpdate(os.Args[2:])
+	case "test":
+		runTest(os.Args[2:])
 	case "version", "-v", "--version":
 		printVersion()
 	case "help", "-h", "--help":
@@ -90,6 +92,8 @@ init 选项：
                           --tinygo-url/--binaryen-url <完整地址> --mirror <前缀>（或 env CONVO_DEV_MIRROR）
   convo-dev env      输出 shell 集成行：eval "$(convo-dev env)"
   convo-dev update   自更新：查 GitHub 最新 tag → go install（直连绕 sumdb 延迟）
+  convo-dev test     插件冒烟（插件项目根目录跑）：静态检查 + 自动下载网关（缓存
+                    ~/.convo-dev/gateway/）→ 临时实例安装 .cpk → echo 实调，测完自动清理
   convo-dev version
 `)
 }

@@ -18,6 +18,8 @@ cd my_plugin
 
 更新：`convo-dev update`（查 GitHub 最新 tag 并自更新；新 tag 推出后立即可更，不等代理索引）。
 
+测试：`convo-dev test`（插件项目根目录跑）——静态检查 + 自动下载 convo 网关（缓存 `~/.convo-dev/gateway/`）→ 临时实例安装 `.cpk` → echo 实调，测完自动清理；`CONVO_DEV_GATEWAY=<路径>` 可指定本地网关。
+
 `init` 生成的项目结构：
 
 ```
