@@ -34,9 +34,12 @@
   <pre id="out" class="muted"></pre>
 </main>
 <script>
-// 【约定】插件 UI 的 API 调用一律用绝对 URL：host 注入 __CONVO_ABS__（origin+网关前缀）。
-// 根相对路径在内置浏览器（IAB）下会被重定基而 404——详见 docs/rules.md。
-var ABS = window.__CONVO_ABS__ || (location.origin + (location.pathname.split("/plugins/")[0] || ""));
+// 【约定】插件 UI 的 API 调用一律用绝对 URL。基址采信规则（纵深防御）：
+// 宿主注入 __CONVO_ABS__ 只在「与页面真实 origin 同前缀」时采信（location.origin 校验），
+// 否则回退 pathname 推断——host 注入异常（如被宿主页 Referer 污染成 wails.localhost，
+// API 不可达）时插件自保。根相对路径在内置浏览器（IAB）下会被重定基而 404——详见 docs/rules.md。
+var INJ = window.__CONVO_ABS__;
+var ABS = (INJ && INJ.indexOf(location.origin) === 0) ? INJ : (location.origin + (location.pathname.split("/plugins/")[0] || ""));
 
 // 【环境自检】__CONVO_ABS__ 缺失 = convo 版本过旧或非平台管理页入口（此时 fallback 在
 // wails.localhost 等非网关 origin 下也拼不出正确地址，请求全挂）——亮横幅说清原因，

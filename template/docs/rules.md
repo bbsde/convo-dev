@@ -34,14 +34,16 @@ var sessionID string // 判空懒初始化，别用 sync.Once
 - **OpenAI 透传中继类**：manifest 声明 `chat_request_patch`（host 进 wasm 前整形），插件读 `pdk.ChatPatchedKey` 非空即 body 零解析透传；流式意图改读 `pdk.ClientStreamKey`。
 - **必须本地改写时**：顶层 `map[string]json.RawMessage` 浅解码，只动要改的键，其余 `RawMessage` 原样透传（见 template/main.go）。
 
-## 4. 插件 UI 的 API 调用一律绝对 URL
+## 4. 插件 UI 的 API 调用一律绝对 URL（注入值做同源采信校验）
 
 ```js
-var ABS = window.__CONVO_ABS__ || (location.origin + (location.pathname.split("/plugins/")[0] || ""));
+var INJ = window.__CONVO_ABS__;
+var ABS = (INJ && INJ.indexOf(location.origin) === 0) ? INJ
+       : (location.origin + (location.pathname.split("/plugins/")[0] || ""));
 fetch(ABS + "/api/plugins/<name>/action", {...})
 ```
 
-根相对 `"/api/..."` 在 ZCode 内置浏览器（Electron IAB）下会被重定基（深层页面 `/app/<id>/**` 之下必坏）、普通浏览器下也可能 404。host 注入的 `__CONVO_ABS__` = origin + 网关前缀，是唯一可靠锚点。
+根相对 `"/api/..."` 在 ZCode 内置浏览器（Electron IAB）下会被重定基（深层页面 `/app/<id>/**` 之下必坏）、普通浏览器下也可能 404。host 注入的 `__CONVO_ABS__` = origin + 网关前缀，是可靠锚点——但**只在以页面真实 `location.origin` 开头时采信**，否则回退 pathname 推断：注入值可能被宿主环境（如 Wails 桌面端 iframe 的宿主页 Referer）污染成 API 不可达的域，直接采信会让页面所有请求 Failed to fetch（convo ≤1.0.98 实案，platform 插件靠此校验自保）。
 
 ## 5. 表名与插件名
 

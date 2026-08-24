@@ -35,9 +35,10 @@
    和运行期调用都会崩）。需要"只做一次"用包级变量判空懒初始化；并发由 host 兜底。
 3. **不整份 JSON 树化请求体**：禁 `map[string]any` 整体 decode→Marshal 组合
    （会打穿 wasm 线性内存）；透传场景用浅解码逐字段处理。
-4. **插件 UI 的 fetch 一律绝对 URL**：
-   `var ABS = window.__CONVO_ABS__ || (location.origin + (location.pathname.split("/plugins/")[0] || ""))`，
-   然后 `fetch(ABS + path)`。根相对路径在内置浏览器下会被重定基，必坏。
+4. **插件 UI 的 fetch 一律绝对 URL，且注入值要做同源采信校验**：
+   `var INJ = window.__CONVO_ABS__; var ABS = (INJ && INJ.indexOf(location.origin) === 0) ? INJ : (location.origin + (location.pathname.split("/plugins/")[0] || ""))`，
+   然后 `fetch(ABS + path)`。只采信与页面同源前缀的注入值（host 注入被污染时自保，
+   platform 插件实案）；根相对路径在内置浏览器下会被重定基，必坏。
    保留模板的**环境自检**（`__CONVO_ABS__` 缺失时亮横幅）与**主题跟随**
    （`#dark` 初始片段 + `convo:theme` postMessage）——它们对应真实事故。
 5. 提交前自查：`grep -rn "sync\." src/` 应为空；echo 实调 200。
