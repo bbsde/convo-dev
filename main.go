@@ -15,10 +15,11 @@
 // init 生成的项目结构（模板占位符 __PLUGIN_NAME__ 会被替换为 <name>）：
 //
 //	<name>/
-//	├── build.sh        # tidy + TinyGo 编译 + cpk 打包（产物进 dist/）
-//	├── dist/           # 构建产物（<name>.wasm / <name>-<ver>.cpk）
-//	├── docs/           # 项目文档（README 骨架 + NOTES 逆向笔记模板）
-//	└── src/            # 源码：main.go / plugin.json / go.mod / migrations/ / ui/
+//	├── AGENTS.md     # AI agent 工作指引（规范速查 + 必读文档索引）
+//	├── build.sh      # tidy + TinyGo 编译 + cpk 打包（产物进 dist/）
+//	├── dist/         # 构建产物（<name>.wasm / <name>-<ver>.cpk）
+//	├── docs/         # 项目文档（README 骨架 + NOTES 逆向笔记模板）
+//	└── src/          # 源码：main.go / plugin.json / go.mod / migrations/ / ui/
 package main
 
 import (

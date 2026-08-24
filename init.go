@@ -94,9 +94,9 @@ func runInit(args []string) {
 	}
 	requireTemplate(tmp)
 
-	// 2. 落位：src/ docs/ build.sh → 目标项目；dist/ 空目录
+	// 2. 落位：src/ docs/ build.sh AGENTS.md → 目标项目；dist/ 空目录
 	fmt.Printf("==> 生成插件 %s → %s\n", name, dest)
-	for _, part := range []string{"src", "docs", "build.sh"} {
+	for _, part := range []string{"src", "docs", "build.sh", "AGENTS.md"} {
 		if err := copyTree(filepath.Join(tmp, part), filepath.Join(dest, part)); err != nil {
 			fatalf("写入 %s 失败：%v", part, err)
 		}
@@ -136,10 +136,11 @@ func runInit(args []string) {
 ✅ 插件已生成：%s
 
     %s/
-    ├── build.sh     构建脚本（产物 → dist/）
-    ├── dist/        构建产物（wasm / cpk）
-    ├── docs/        项目文档（README + NOTES 逆向笔记）
-    └── src/         源码（main.go / plugin.json / migrations / ui）
+    ├── AGENTS.md     AI agent 工作指引（规范速查 + 必读文档索引）
+    ├── build.sh      构建脚本（产物 → dist/）
+    ├── dist/         构建产物（wasm / cpk）
+    ├── docs/         项目文档（README + NOTES 逆向笔记）
+    └── src/          源码（main.go / plugin.json / migrations / ui）
 
 下一步：
   1. 编辑 src/plugin.json：真实模型清单（models[].id）、标题、描述
