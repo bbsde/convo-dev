@@ -17,6 +17,10 @@
 </style>
 </head>
 <body>
+<div id="env-warn" style="display:none; margin-bottom:12px; padding:10px 12px; border:1px solid #e6a700; border-radius:8px; font-size:13px; color:#e6a700;">
+  ⚠ 未检测到宿主注入的 <code>__CONVO_ABS__</code>——convo 版本过旧，或页面不是从控制台·平台管理页打开。
+  API 调用可能全部失败，排查步骤见 docs/rules.md。
+</div>
 <main class="card">
   <h2>__PLUGIN_NAME__</h2>
   <p class="muted">OpenAI 兼容平台接入（脚手架模板）：API Key + Base URL 直配。</p>
@@ -33,6 +37,23 @@
 // 【约定】插件 UI 的 API 调用一律用绝对 URL：host 注入 __CONVO_ABS__（origin+网关前缀）。
 // 根相对路径在内置浏览器（IAB）下会被重定基而 404——详见 docs/rules.md。
 var ABS = window.__CONVO_ABS__ || (location.origin + (location.pathname.split("/plugins/")[0] || ""));
+
+// 【环境自检】__CONVO_ABS__ 缺失 = convo 版本过旧或非平台管理页入口（此时 fallback 在
+// wails.localhost 等非网关 origin 下也拼不出正确地址，请求全挂）——亮横幅说清原因，
+// 别让用户对着一堆网络错误猜。
+if (!window.__CONVO_ABS__) document.getElementById("env-warn").style.display = "block";
+
+// 【主题跟随宿主】主应用（平台管理页）两种途径告知主题：
+//   初始 = iframe URL 带 #dark 片段；运行中 = postMessage({type:"convo:theme", theme})。
+// 另有 {type:"convo:layout", desktop:bool}（宽窄屏布局提示，本页用不上，按需接收）。
+(function () {
+  var apply = function (t) { document.documentElement.style.colorScheme = t; };
+  apply(location.hash.indexOf("dark") >= 0 ? "dark" : "light");
+  window.addEventListener("message", function (e) {
+    var d = e.data || {};
+    if (d.type === "convo:theme") apply(d.theme === "dark" ? "dark" : "light");
+  });
+})();
 
 function api(method, path, body) {
   return fetch(ABS + path, {

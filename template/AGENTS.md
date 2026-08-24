@@ -37,6 +37,8 @@
 4. **插件 UI 的 fetch 一律绝对 URL**：
    `var ABS = window.__CONVO_ABS__ || (location.origin + (location.pathname.split("/plugins/")[0] || ""))`，
    然后 `fetch(ABS + path)`。根相对路径在内置浏览器下会被重定基，必坏。
+   保留模板的**环境自检**（`__CONVO_ABS__` 缺失时亮横幅）与**主题跟随**
+   （`#dark` 初始片段 + `convo:theme` postMessage）——它们对应真实事故。
 5. 提交前自查：`grep -rn "sync\." src/` 应为空；echo 实调 200。
 
 ## 调试回路
