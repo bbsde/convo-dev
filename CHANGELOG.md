@@ -6,6 +6,7 @@
 
 ## 2026-08-24
 
+- `93469e2` feat: init 默认 ref 跟随 CLI 自身版本 tag（buildinfo 仅认纯 vX.Y.Z，pseudo-version/devel 回退 main）——模板与 CLI/pdk 契约不再漂移，热修走 --ref main；新增 docs/releasing.md 发布规范（双 tag 序列 / pdk 升级检查单 / sumdb 延迟坑）；发布 tag v0.1.1（CLI）
 - `b8ffb96` fix: init 允许 flag 出现在位置参数之后（flag 包默认停在首个位置参数）；模板 build.sh 改用探测到的 TinyGo 路径编译（PATH 外的 ~/.convo-dev/tools 也能用）——狗粮全链路（go install→setup→init→build.sh→wasm/cpk 产物）实测通过
 - `73f4844` feat: convo-dev CLI 化——`init` 远程拉模板（codeload tarball）生成 src/dist/docs 三层布局项目；新增 `setup`（自动安装 TinyGo 0.41.1 + binaryen version_120 到 ~/.convo-dev/tools，--mirror/--url 可覆盖）与 `doctor`/`env`；发布 tag v0.1.0（CLI）
 - `67d2059` docs(testing): 补 wasm-opt(binaryen) 环境依赖说明
