@@ -6,7 +6,11 @@ convo 控制台·平台管理页的 iframe 里。**无构建、无框架、无�
 模板 `src/ui/index.html` 是权威样板（设计 token + 组件 + 账号管理全流程）。做新 UI
 从它出发改，不要从零写。
 
-## 设计 token（与一方插件完全同源）
+## 设计 token（与一方插件完全同源；本模板即权威源）
+
+**本文件的 token 块是唯一权威源**——convo 一方插件（platform/workbuddy/zcode）的 token 由
+convo-private 侧 `ui-tokens.mjs` 工具从本模板同步（fnos-theme.css 变更时改这里并发版）。
+改 token 请直接改本模板 `<style>` 的 `:root`/`.dark` 块。
 
 token 值逐项取自 convo 主应用 `fnos-theme.css` 的明暗两套 Semi 变量（fnOS Semi Design
 风格），与 platform / workbuddy / zcode 三个一方插件的 UI **完全一致**——生态插件与
