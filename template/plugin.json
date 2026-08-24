@@ -1,0 +1,25 @@
+{
+  "name": "__PLUGIN_NAME__",
+  "title": "__PLUGIN_NAME__",
+  "abi_version": 1,
+  "module": "__PLUGIN_NAME__.wasm",
+  "tables": {
+    "accounts": "__PLUGIN_NAME___accounts"
+  },
+  "models": [
+    {
+      "id": "gpt-4o-mini",
+      "endpoints": ["chat"],
+      "capabilities": ["tools"],
+      "max_context": 128000
+    }
+  ],
+  "chat_request_patch": {
+    "model_from_combo": true,
+    "stream_options_include_usage": true
+  },
+  "description": "TODO：插件描述（插件详情页展示，说清接入什么平台、怎么配置）。",
+  "author": "your-name",
+  "version": "0.1.0",
+  "schema_version": 1
+}
