@@ -6,6 +6,7 @@
 
 ## 2026-08-24
 
+- `e72befb` fix: update 抗弱网——tags.atom 超时 15s→30s、失败自动重试一次、报错提示 HTTPS_PROXY 代理设置（Go 读代理环境变量；直连 GitHub 波动实案：本机 Clash shell 通、用户终端直连超时）；发布 tag v0.1.10（CLI）
 - `fd1ee6c` feat(template): ABS 注入值同源采信校验成为标准写法——只采信以页面 location.origin 开头的 __CONVO_ABS__，否则回退 pathname 推断（convo ≤1.0.98 host 注入被 Wails 宿主 Referer 污染实案；platform 插件靠此防御自保而模板旧写法中招）；模板 UI/rules.md/AGENTS.md 三处同步；发布 tag v0.1.9（CLI）
 - `a9fc2ad` fix(template): 产物位置对齐 host 发现约定——wasm 编译输出 dist/→src/（host 要求 wasm 与 plugin.json 同目录；此前照文档软链 src/ 必报找不到 wasm，ark 插件实案定位）；调试主路径改为 build → dist/*.cpk → 控制台市场页拖入安装（即装即载免重启），目录方式降备选；模板补 .gitignore；实测 install-cpk API 全链路 loaded+echo 200；发布 tag v0.1.8（CLI）
 - `cced533` feat(template): UI 样板补全——`__CONVO_ABS__` 环境自检横幅（缺失 = convo 版本过旧/非平台管理页入口，直说原因不静默挂）+ 宿主主题跟随（#dark 初始片段 + convo:theme postMessage + colorScheme 应用）；铁律注明保留防护；发布 tag v0.1.7（CLI）
