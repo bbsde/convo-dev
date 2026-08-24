@@ -20,33 +20,43 @@ type atomEntry struct {
 
 // fetchLatestTag 读仓库 tags.atom（无需认证、无 API 限流），返回最高的纯 vX.Y.Z
 // （排除 pdk/ 子模块 tag）。feed 含最近发布的 tag，取语义最高即可。
+// 弱网（直连 GitHub 波动）自动重试一次。
 func fetchLatestTag() (string, error) {
-	client := &http.Client{Timeout: 15 * time.Second}
-	resp, err := client.Get("https://github.com/bbsde/" + repoName + "/tags.atom")
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("GitHub HTTP %d", resp.StatusCode)
-	}
-	var feed atomFeed
-	if err := xml.NewDecoder(resp.Body).Decode(&feed); err != nil {
-		return "", err
-	}
-	best := ""
-	for _, e := range feed.Entries {
-		if !semverTagRe.MatchString(e.Title) {
+	var lastErr error
+	for attempt := 0; attempt < 2; attempt++ {
+		if attempt > 0 {
+			time.Sleep(2 * time.Second)
+		}
+		client := &http.Client{Timeout: 30 * time.Second}
+		resp, err := client.Get("https://github.com/bbsde/" + repoName + "/tags.atom")
+		if err != nil {
+			lastErr = err
 			continue
 		}
-		if best == "" || semverLess(best, e.Title) {
-			best = e.Title
+		defer resp.Body.Close()
+		if resp.StatusCode != http.StatusOK {
+			lastErr = fmt.Errorf("GitHub HTTP %d", resp.StatusCode)
+			continue
 		}
+		var feed atomFeed
+		if err := xml.NewDecoder(resp.Body).Decode(&feed); err != nil {
+			return "", err
+		}
+		best := ""
+		for _, e := range feed.Entries {
+			if !semverTagRe.MatchString(e.Title) {
+				continue
+			}
+			if best == "" || semverLess(best, e.Title) {
+				best = e.Title
+			}
+		}
+		if best == "" {
+			return "", fmt.Errorf("feed 中未找到 CLI 版本（vX.Y.Z）")
+		}
+		return best, nil
 	}
-	if best == "" {
-		return "", fmt.Errorf("feed 中未找到 CLI 版本（vX.Y.Z）")
-	}
-	return best, nil
+	return "", lastErr
 }
 
 // semverLess 比较 vA.B.C < vD.E.F。
@@ -72,7 +82,11 @@ func runUpdate(args []string) {
 	}
 	latest, err := fetchLatestTag()
 	if err != nil {
-		fatalf("查询最新版本失败：%v\n  网络不通可稍后重试，或手动：go install github.com/bbsde/%s@latest", err, repoName)
+		fatalf("查询最新版本失败：%v\n"+
+			"  常见原因：直连 GitHub 波动（已自动重试仍失败）。若本机有代理，设置后重试：\n"+
+			"    PowerShell:  $env:HTTPS_PROXY=\"http://127.0.0.1:7890\"   # 端口按代理实际改\n"+
+			"    Git Bash:    export HTTPS_PROXY=http://127.0.0.1:7890\n"+
+			"  或手动：go install github.com/bbsde/%s@latest", err, repoName)
 	}
 	fmt.Printf("最新 %s\n", latest)
 	if cur == latest {
