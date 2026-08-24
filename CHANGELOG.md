@@ -1,0 +1,12 @@
+# convo-dev 更新日志
+
+> 插件开发脚手架 CLI（convo-dev init/setup/doctor/env）+ pdk SDK（module `github.com/bbsde/convo-dev/pdk`）+ 项目模板与契约文档。
+> 条目 = 提交（`hash` 可溯源）；按日期倒序。改到本仓就顺手在当日（或新建日期）节下补一行。
+> pdk 的更早历史见 convo-private 仓 git 历史（原 `src/pdk/CHANGELOG.md`，2026-08-24 随迁移删除）。
+
+## 2026-08-24
+
+- `b8ffb96` fix: init 允许 flag 出现在位置参数之后（flag 包默认停在首个位置参数）；模板 build.sh 改用探测到的 TinyGo 路径编译（PATH 外的 ~/.convo-dev/tools 也能用）——狗粮全链路（go install→setup→init→build.sh→wasm/cpk 产物）实测通过
+- `73f4844` feat: convo-dev CLI 化——`init` 远程拉模板（codeload tarball）生成 src/dist/docs 三层布局项目；新增 `setup`（自动安装 TinyGo 0.41.1 + binaryen version_120 到 ~/.convo-dev/tools，--mirror/--url 可覆盖）与 `doctor`/`env`；发布 tag v0.1.0（CLI）
+- `67d2059` docs(testing): 补 wasm-opt(binaryen) 环境依赖说明
+- `44c601c` feat: 插件开发包首版——pdk SDK（tag pdk/v0.1.0）+ 脚手架模板（OpenAI 兼容接入：echo / verify_key 落库三件套 / chat 流式非流式中继 / UI / migration）+ 契约文档四篇（manifest / pdk-api / rules / testing）
