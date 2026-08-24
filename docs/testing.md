@@ -2,11 +2,14 @@
 
 ## 前置工具
 
-| 工具 | 用途 | 安装 |
-|---|---|---|
-| Go ≥ 1.22 | go mod / 依赖管理 | https://go.dev/dl/ |
-| TinyGo | 编译 wasm | https://tinygo.org/getting-started/install/ |
-| convo 网关 | 运行/调试插件 | https://github.com/bbsde/convo/releases |
+```bash
+convo-dev setup    # 一键体检 + 自动安装缺失工具（TinyGo / binaryen → ~/.convo-dev/tools）
+convo-dev doctor   # 只体检不安装
+```
+
+手动安装（可选）：[Go ≥ 1.22](https://go.dev/dl/) · [TinyGo](https://tinygo.org/getting-started/install/) ·
+[binaryen（wasm-opt）](https://github.com/WebAssembly/binaryen/releases)（TinyGo 缺 wasm-opt 时设 `WASMOPT=<路径>`）。
+运行插件还需要 [convo 网关](https://github.com/bbsde/convo/releases)。
 
 ## 编译
 

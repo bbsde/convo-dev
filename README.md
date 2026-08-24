@@ -1,24 +1,38 @@
-# convo-dev — Convo 插件开发包
+# convo-dev — Convo 插件开发脚手架
 
-为 [Convo](https://github.com/bbsde/convo)（多平台大模型聚合网关）开发 wasm 插件所需的一切：**pdk SDK + 项目脚手架 + 契约文档**。
+为 [Convo](https://github.com/bbsde/convo)（多平台大模型聚合网关）开发 wasm 插件所需的一切：**`convo-dev` 脚手架 CLI + pdk SDK + 契约文档**。
 
 ## 快速开始
 
 ```bash
-git clone https://github.com/bbsde/convo-dev.git
-cd convo-dev
+# 安装脚手架命令（一次性）
+go install github.com/bbsde/convo-dev@latest
 
-# 生成一个新插件项目（OpenAI 兼容平台接入模板）
-./new-plugin.sh my-plugin ~/src/my-plugin
-
-cd ~/src/my-plugin
-go mod tidy
-tinygo build -target wasi -no-debug -o my-plugin.wasm .
-
-# 安装到 convo 网关调试：见 docs/testing.md
+# 生成插件项目（远程拉取本仓模板，无需 clone）
+convo-dev init my-plugin
+cd my-plugin
+./build.sh          # go mod tidy + TinyGo 编译 + cpk 打包 → dist/
 ```
 
 前置：[Go ≥ 1.22](https://go.dev/dl/) + [TinyGo](https://tinygo.org/getting-started/install/) + [convo 网关](https://github.com/bbsde/convo/releases)。
+
+`init` 生成的项目结构：
+
+```
+my-plugin/
+├── build.sh        # 构建脚本（产物 → dist/）
+├── dist/           # 构建产物（my-plugin.wasm / my-plugin-<ver>.cpk）
+├── docs/           # 项目文档（README 骨架 + NOTES 逆向笔记模板）
+└── src/            # 源码
+    ├── main.go     # OpenAI 兼容接入模板（echo + verify_key + chat 流式/非流式中继）
+    ├── plugin.json # manifest（模型清单/表声明/chat_request_patch）
+    ├── go.mod
+    ├── migrations/ # SQLite 迁移（通用账号表标准列）
+    └── ui/         # 插件管理 UI（添加账号全流程）
+```
+
+`convo-dev init` 选项：`-d <dir>` 目标目录、`--ref <tag|分支>` 拉指定版本模板（默认 main）、
+`--url <tarball>` 镜像地址、`--template <dir>` 本地模板（离线）。`convo-dev version` 看版本。
 
 ## 插件能做什么
 
@@ -31,9 +45,9 @@ tinygo build -target wasi -no-debug -o my-plugin.wasm .
 
 | 路径 | 说明 |
 |---|---|
-| `pdk/` | 插件 SDK（Go module `github.com/bbsde/convo-dev/pdk`），wasm↔host 的全部 ABI 封装 |
-| `template/` | 插件模板：最小可编译的 OpenAI 兼容接入（echo + verify_key + chat 流式/非流式中继 + UI + migration） |
-| `new-plugin.sh` | 脚手架：从模板生成插件项目并替换占位符 |
+| `main.go` + `go.mod` | `convo-dev` CLI 本体（`go install github.com/bbsde/convo-dev@latest`） |
+| `pdk/` | 插件 SDK（独立 Go module `github.com/bbsde/convo-dev/pdk`），wasm↔host 的全部 ABI 封装 |
+| `template/` | 项目模板（CLI 远程拉取的源）：`src/` 源码 + `docs/` 文档模板 + `build.sh` |
 | `docs/manifest.md` | plugin.json 字段参考（表/模型/整形/定时任务/授权） |
 | `docs/pdk-api.md` | SDK API 参考（注册回调 / HTTP / 会话 / 配置与状态） |
 | `docs/rules.md` | **硬性约定与坑**（echo 必须、禁 sync 原语、禁 JSON 树化、UI 绝对 URL…） |
