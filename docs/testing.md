@@ -18,6 +18,9 @@ tinygo build -target wasi -no-debug -o my-plugin.wasm .
 
 产物 = `my-plugin.wasm`；与 `plugin.json` 同目录即构成可安装插件。
 
+> TinyGo 报 `could not find wasm-opt` 时：安装 [binaryen](https://github.com/WebAssembly/binaryen/releases)
+> 并设 `WASMOPT=/path/to/wasm-opt(.exe)`（部分 TinyGo 发行版不带它）。
+
 > 迭代 pdk 本身时可用本地替换：`go mod edit -replace github.com/bbsde/convo-dev/pdk=../convo-dev/pdk`
 
 ## 安装到 convo 调试
