@@ -75,7 +75,8 @@ func usage() {
 
 init 选项：
   -d <dir>        目标目录（默认 ./<name>）
-  --ref <ref>     模板分支/tag（默认 main）
+  --ref <ref>     模板分支/tag（默认 = CLI 自身版本 tag——版本对齐防契约漂移；
+                  本地 go build 构建为 main；模板热修可显式 --ref main）
   --url <url>     完整 tarball 地址（镜像/离线包，覆盖默认 codeload）
   --template <d>  本地模板目录（含 src/ docs/ build.sh，跳过远程拉取）
 
@@ -88,10 +89,24 @@ init 选项：
 `)
 }
 
+// semverTagRe 只认纯语义版本 tag（vX.Y.Z）。本地 go build 的 buildinfo 可能给出
+// pseudo-version（v0.1.1-0.20260824...+dirty），它同样以 v 开头但不是可拉取的 ref，
+// 必须排除——否则 init 会去拉一个不存在的 tag。
+var semverTagRe = regexp.MustCompile(`^v\d+\.\d+\.\d+$`)
+
+// selfVersion 返回 CLI 自身版本 tag（go install @vX.Y.Z 装出的二进制为该 tag；
+// 本地构建/pseudo-version 返回空）。init 用它做默认模板 ref，保证 CLI 与模板版本对齐。
+func selfVersion() string {
+	if bi, ok := debug.ReadBuildInfo(); ok && semverTagRe.MatchString(bi.Main.Version) {
+		return bi.Main.Version
+	}
+	return ""
+}
+
 func printVersion() {
 	v := "(devel)"
-	if bi, ok := debug.ReadBuildInfo(); ok && bi.Main.Version != "" && bi.Main.Version != "(devel)" {
-		v = bi.Main.Version
+	if bi, ok := debug.ReadBuildInfo(); ok && bi.Main.Version != "" {
+		v = bi.Main.Version // 含 pseudo-version（如 v0.1.1-0.…+dirty），比 (devel) 信息多
 	}
 	fmt.Printf("convo-dev %s (%s/%s)\n", v, runtime.GOOS, runtime.GOARCH)
 }

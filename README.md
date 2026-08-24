@@ -52,6 +52,7 @@ my-plugin/
 | `docs/pdk-api.md` | SDK API 参考（注册回调 / HTTP / 会话 / 配置与状态） |
 | `docs/rules.md` | **硬性约定与坑**（echo 必须、禁 sync 原语、禁 JSON 树化、UI 绝对 URL…） |
 | `docs/testing.md` | 编译、安装调试、打包分发、发布自查 |
+| `docs/releasing.md` | 发布与版本管理（CLI/pdk 双 tag 序列、模板版本对齐、pdk 升级检查单） |
 
 ## 先读 rules.md
 

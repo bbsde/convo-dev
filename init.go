@@ -19,7 +19,13 @@ func runInit(args []string) {
 	fs := flag.NewFlagSet("init", flag.ExitOnError)
 	fs.Usage = usage
 	dir := fs.String("d", "", "目标目录（默认 ./<name>）")
-	ref := fs.String("ref", "main", "模板分支/tag")
+	// 默认 ref 跟随 CLI 自身版本 tag：go install @v0.1.2 装的 CLI 永远拉 v0.1.2 时点的
+	// 模板（模板与 CLI/pdk 契约不漂移）；本地 (devel) 构建回退 main。热修走 --ref main。
+	defaultRef := selfVersion()
+	if defaultRef == "" {
+		defaultRef = "main"
+	}
+	ref := fs.String("ref", defaultRef, "模板分支/tag")
 	url := fs.String("url", "", "完整 tarball 地址（覆盖默认）")
 	tplDir := fs.String("template", "", "本地模板目录（跳过远程拉取）")
 
